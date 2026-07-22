@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAR Method Builder</title>
+<meta name="description" content="Guided builder for STAR interview answers: Situation, Task, Action, Result. Live word counts, assembled preview, question bank, and saved answers in your browser. No external services, a structured writing aid.">
+<link rel="canonical" href="https://0xelitesystem.github.io/star-method-builder/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="STAR Method Builder">
+<meta property="og:description" content="Build tight STAR interview answers with guided prompts, live word counts, and a full-answer preview. Save multiple answers locally. Everything stays in your browser.">
+<meta property="og:url" content="https://0xelitesystem.github.io/star-method-builder/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "STAR Method Builder",
+  "description": "Guided builder for STAR interview answers (Situation, Task, Action, Result) with live word counts, an assembled preview, a behavioral question bank, and locally saved answers.",
+  "url": "https://0xelitesystem.github.io/star-method-builder/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": { "@type": "Organization", "name": "0xelitesystem", "url": "https://elitesystem.ai" }
+}
+</script>
+<style>
+:root {
+  --bg: #fafaf6;
+  --surface: #ffffff;
+  --ink: #0a1d1e;
+  --ink-soft: #2c4a4c;
+  --rule: #c8d4d3;
+  --teal: #0f5c60;
+  --teal-deep: #0a4548;
+  --gold: #b07d2a;
+  --gold-deep: #8a611f;
+  --ok: #1a5c2e;
+  --warn: #8a5a00;
+  --err: #8b1a1a;
+  --code-bg: #f0ebe1;
+  --s-col: #b03d8f;
+  --t-col: #2660a8;
+  --a-col: #3a6b1f;
+  --r-col: #8a611f;
+}
+[data-theme="dark"] {
+  --bg: #0c1c1d;
+  --surface: #14292a;
+  --ink: #e8ebe6;
+  --ink-soft: #b0c0bd;
+  --rule: #2a4042;
+  --teal: #4ab4ba;
+  --teal-deep: #6dc8ce;
+  --gold: #d4a155;
+  --gold-deep: #e6b876;
+  --ok: #6dd380;
+  --warn: #d4a155;
+  --err: #e88080;
+  --code-bg: #0a1718;
+  --s-col: #d97ab8;
+  --t-col: #6da8e0;
+  --a-col: #8ec870;
+  --r-col: #e6b876;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: ui-serif, Georgia, "Times New Roman", serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  line-height: 1.55;
+}
+.wrap { max-width: 1100px; margin: 0 auto; }
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 2px solid var(--teal);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--teal);
+}
+.tag {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.75rem;
+  color: var(--gold-deep);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+[data-theme="dark"] .tag { color: var(--gold); }
+.theme-btn {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink-soft);
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.theme-btn:hover { border-color: var(--teal); color: var(--teal); }
+.lede {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  margin-bottom: 1.75rem;
+  max-width: 72ch;
+}
+.section {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-radius: 3px;
+}
+.section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.85rem;
+}
+label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+select, input[type="text"], textarea {
+  width: 100%;
+  background: var(--code-bg);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  padding: 0.55rem 0.65rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  border-radius: 2px;
+}
+textarea { min-height: 110px; resize: vertical; line-height: 1.55; }
+select:focus, input:focus, textarea:focus { outline: 2px solid var(--teal); outline-offset: 1px; }
+.star-card { border-left: 4px solid var(--rule); }
+.star-card.card-s { border-left-color: var(--s-col); }
+.star-card.card-t { border-left-color: var(--t-col); }
+.star-card.card-a { border-left-color: var(--a-col); }
+.star-card.card-r { border-left-color: var(--r-col); }
+.star-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.35rem;
+}
+.star-letter {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.card-s .star-letter { color: var(--s-col); }
+.card-t .star-letter { color: var(--t-col); }
+.card-a .star-letter { color: var(--a-col); }
+.card-r .star-letter { color: var(--r-col); }
+.explain { font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 0.5rem; }
+.prompts {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin: 0 0 0.65rem 1.1rem;
+}
+.prompts li { margin-bottom: 0.15rem; }
+.wc {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.78rem;
+}
+.wc-ok { color: var(--ok); }
+.wc-warn { color: var(--warn); }
+.wc-err { color: var(--err); }
+.preview {
+  background: var(--code-bg);
+  padding: 1rem;
+  border-radius: 2px;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  min-height: 4rem;
+}
+.preview p { margin-bottom: 0.85rem; }
+.preview p:last-child { margin-bottom: 0; }
+.preview .empty { color: var(--ink-soft); font-style: italic; }
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-top: 0.85rem;
+}
+button {
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  border-radius: 2px;
+}
+button:hover { border-color: var(--teal); }
+button.primary {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--surface);
+  font-weight: 600;
+}
+[data-theme="dark"] button.primary { color: var(--bg) !important; }
+button.primary:hover { background: var(--teal-deep); border-color: var(--teal-deep); }
+button.danger:hover { border-color: var(--err); color: var(--err); }
+.copy-done { font-size: 0.8rem; color: var(--ok); }
+.save-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+}
+.saved-list { list-style: none; }
+.saved-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.88rem;
+  flex-wrap: wrap;
+}
+.saved-list li:last-child { border-bottom: none; }
+.saved-name { font-weight: 600; }
+.saved-q { font-size: 0.78rem; color: var(--ink-soft); font-style: italic; }
+.saved-actions { display: flex; gap: 0.5rem; }
+.saved-actions button { padding: 0.3rem 0.7rem; font-size: 0.78rem; }
+.hint {
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-top: 0.4rem;
+}
+.tips { font-size: 0.88rem; margin-left: 1.1rem; }
+.tips li { margin-bottom: 0.4rem; }
+.status-msg { font-size: 0.8rem; color: var(--ok); margin-top: 0.5rem; }
+footer {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+footer a { color: var(--teal); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+@media (max-width: 640px) {
+  body { padding: 1rem 0.75rem; }
+  h1 { font-size: 1.4rem; }
+  .save-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>STAR Method Builder</h1>
+    <div class="tag">Situation, Task, Action, Result</div>
+  </div>
+  <button class="theme-btn" id="theme-toggle" type="button">Dark</button>
+</header>
+
+<p class="lede">Draft behavioral interview answers piece by piece. Pick a question, write each STAR part with guided prompts and word targets, watch the full answer assemble live, then save it for practice. No external services, a structured writing aid. Everything stays in your browser.</p>
+
+<div class="section">
+  <div class="section-title">Pick a question to frame the exercise</div>
+  <label for="question">Behavioral question</label>
+  <select id="question">
+    <option value="">(free-form, no specific question)</option>
+    <option>Tell me about a time you had a conflict with a coworker.</option>
+    <option>Tell me about a time you disagreed with your manager.</option>
+    <option>Describe a project that failed. What happened?</option>
+    <option>Tell me about your biggest professional mistake.</option>
+    <option>Tell me about a time you led a team through something hard.</option>
+    <option>Describe a time you influenced people without authority.</option>
+    <option>Tell me about a time you missed a deadline, or nearly did.</option>
+    <option>Describe a time you had to deliver under serious time pressure.</option>
+    <option>Tell me about a time you had to make a decision with incomplete information.</option>
+    <option>Describe a time priorities changed suddenly and how you handled it.</option>
+    <option>Tell me about a time you had to learn something new, fast.</option>
+    <option>Describe a time you received tough feedback. What did you do?</option>
+    <option>Tell me about a time you went beyond what the role required.</option>
+    <option>Describe a time you had to say no to a stakeholder.</option>
+    <option>Tell me about a time you improved a process nobody asked you to fix.</option>
+  </select>
+</div>
+
+<div class="section star-card card-s">
+  <div class="star-head">
+    <span class="star-letter">S. Situation</span>
+    <span class="wc" id="wc-s" aria-live="polite">0 words (aim 30 to 60)</span>
+  </div>
+  <div class="explain">Set the scene in two or three sentences: the context the listener needs, nothing more.</div>
+  <ul class="prompts">
+    <li>Where were you working, and what was your role?</li>
+    <li>What was the context, and what was at stake?</li>
+    <li>What event or constraint kicked this off?</li>
+  </ul>
+  <label for="in-s">Situation</label>
+  <textarea id="in-s" spellcheck="true"></textarea>
+</div>
+
+<div class="section star-card card-t">
+  <div class="star-head">
+    <span class="star-letter">T. Task</span>
+    <span class="wc" id="wc-t" aria-live="polite">0 words (aim 30 to 60)</span>
+  </div>
+  <div class="explain">Your specific responsibility in that situation, stated as a clear goal.</div>
+  <ul class="prompts">
+    <li>What exactly were you responsible for delivering?</li>
+    <li>What was the goal, the deadline, or the bar for success?</li>
+    <li>Why did it land on you and not someone else?</li>
+  </ul>
+  <label for="in-t">Task</label>
+  <textarea id="in-t" spellcheck="true"></textarea>
+</div>
+
+<div class="section star-card card-a">
+  <div class="star-head">
+    <span class="star-letter">A. Action</span>
+    <span class="wc" id="wc-a" aria-live="polite">0 words (aim 60 to 120)</span>
+  </div>
+  <div class="explain">The meat of the answer: what you personally did, step by step. Say "I", not "we".</div>
+  <ul class="prompts">
+    <li>What did you do first, second, third?</li>
+    <li>What decisions or trade-offs did you make, and why?</li>
+    <li>Who did you bring in, and how did you get them on board?</li>
+  </ul>
+  <label for="in-a">Action</label>
+  <textarea id="in-a" spellcheck="true" style="min-height:150px;"></textarea>
+</div>
+
+<div class="section star-card card-r">
+  <div class="star-head">
+    <span class="star-letter">R. Result</span>
+    <span class="wc" id="wc-r" aria-live="polite">0 words (aim 30 to 60)</span>
+  </div>
+  <div class="explain">The concrete outcome. Include a number if you possibly can: percent, dollars, time saved, people affected.</div>
+  <ul class="prompts">
+    <li>What changed, and can you quantify it?</li>
+    <li>What did the team or the business gain?</li>
+    <li>What did you learn or do differently afterward?</li>
+  </ul>
+  <label for="in-r">Result</label>
+  <textarea id="in-r" spellcheck="true"></textarea>
+</div>
+
+<div class="section">
+  <div class="section-title">Assembled answer</div>
+  <div class="preview" id="preview" aria-live="polite"><p class="empty">Your full answer builds here as you type.</p></div>
+  <div class="total-row">
+    <span class="wc" id="wc-total">0 words total (target 150 to 300, roughly 60 to 90 seconds spoken)</span>
+    <span>
+      <button class="primary" id="copy-btn" type="button">Copy full answer</button>
+      <span class="copy-done" id="copy-done" role="status"></span>
+    </span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Saved answers</div>
+  <div class="save-row">
+    <div>
+      <label for="save-name">Answer name</label>
+      <input type="text" id="save-name" placeholder="e.g. conflict, migration deadline" autocomplete="off">
+    </div>
+    <div style="align-self:end;">
+      <button class="primary" id="save-btn" type="button">Save</button>
+    </div>
+  </div>
+  <ul class="saved-list" id="saved-list"></ul>
+  <div class="status-msg" id="save-status" role="status"></div>
+  <div class="hint">Saved answers live in this browser's localStorage only. They never leave your device, and clearing site data removes them.</div>
+</div>
+
+<div class="section">
+  <div class="section-title">Tips</div>
+  <ul class="tips">
+    <li><strong>Quantify the result.</strong> "Cut deploy time from 40 minutes to 8" beats "made deploys faster" every time.</li>
+    <li><strong>Say "I", not "we", for your actions.</strong> The interviewer is hiring you, not your old team. Credit others, but own your part.</li>
+    <li><strong>Keep the situation short.</strong> The most common failure mode is three minutes of backstory. Two sentences of context, then move.</li>
+    <li><strong>One story per question.</strong> Do not chain two examples into one answer; pick the stronger story and go deep.</li>
+    <li><strong>End on the result.</strong> Land the number, pause, stop talking. Do not trail off into caveats.</li>
+    <li><strong>Practice out loud.</strong> 150 to 300 written words is roughly 60 to 90 seconds spoken; time yourself once.</li>
+  </ul>
+</div>
+
+<footer>
+  <div>STAR Method Builder. Open source, MIT licensed. Built by <a href="https://elitesystem.ai" target="_blank" rel="noopener">elitesystem</a>.</div>
+  <div>No external dependencies. Works offline.</div>
+</footer>
+</div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+
+// Theme toggle
+const themeBtn = $("theme-toggle");
+function setTheme(t) {
+  document.documentElement.setAttribute("data-theme", t);
+  themeBtn.textContent = t === "dark" ? "Light" : "Dark";
+}
+themeBtn.addEventListener("click", () => {
+  const cur = document.documentElement.getAttribute("data-theme") || "light";
+  setTheme(cur === "dark" ? "light" : "dark");
+});
+setTheme("light");
+
+const PARTS = [
+  { key: "s", label: "Situation", min: 30, max: 60 },
+  { key: "t", label: "Task", min: 30, max: 60 },
+  { key: "a", label: "Action", min: 60, max: 120 },
+  { key: "r", label: "Result", min: 30, max: 60 }
+];
+const TOTAL_MIN = 150, TOTAL_MAX = 300;
+const STORE_KEY = "star-method-builder.answers.v1";
+
+function words(s) {
+  const m = s.trim().match(/\S+/g);
+  return m ? m.length : 0;
+}
+function esc(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function update() {
+  let total = 0;
+  const paras = [];
+  // Situation + Task read as one flowing setup paragraph; Action and Result stand alone.
+  const sText = $("in-s").value.trim();
+  const tText = $("in-t").value.trim();
+  const aText = $("in-a").value.trim();
+  const rText = $("in-r").value.trim();
+
+  for (const p of PARTS) {
+    const n = words($("in-" + p.key).value);
+    total += n;
+    const el = $("wc-" + p.key);
+    el.textContent = n + " words (aim " + p.min + " to " + p.max + ")";
+    el.className = "wc " + (n === 0 ? "" : n < p.min ? "wc-warn" : n > p.max ? "wc-err" : "wc-ok");
+  }
+
+  const setup = [sText, tText].filter(Boolean).join(" ");
+  if (setup) paras.push(setup);
+  if (aText) paras.push(aText);
+  if (rText) paras.push(rText);
+
+  const prev = $("preview");
+  if (paras.length === 0) {
+    prev.innerHTML = '<p class="empty">Your full answer builds here as you type.</p>';
+  } else {
+    prev.innerHTML = paras.map((p) => "<p>" + esc(p) + "</p>").join("");
+  }
+
+  const totEl = $("wc-total");
+  totEl.textContent = total + " words total (target " + TOTAL_MIN + " to " + TOTAL_MAX + ", roughly 60 to 90 seconds spoken)";
+  totEl.className = "wc " + (total === 0 ? "" : total < TOTAL_MIN ? "wc-warn" : total > TOTAL_MAX ? "wc-err" : "wc-ok");
+}
+
+function fullText() {
+  const q = $("question").value;
+  const setup = [$("in-s").value.trim(), $("in-t").value.trim()].filter(Boolean).join(" ");
+  const parts = [setup, $("in-a").value.trim(), $("in-r").value.trim()].filter(Boolean);
+  return (q ? "Q: " + q + "\n\n" : "") + parts.join("\n\n");
+}
+
+$("copy-btn").addEventListener("click", async () => {
+  const text = fullText();
+  try {
+    await navigator.clipboard.writeText(text);
+    $("copy-done").textContent = "Copied.";
+  } catch (e) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    $("copy-done").textContent = "Copied.";
+  }
+  setTimeout(() => { $("copy-done").textContent = ""; }, 2000);
+});
+
+// Saved answers in localStorage
+function loadStore() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    const obj = raw ? JSON.parse(raw) : {};
+    return obj && typeof obj === "object" ? obj : {};
+  } catch (e) {
+    return {};
+  }
+}
+function saveStore(obj) {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(obj));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+function flash(msg) {
+  $("save-status").textContent = msg;
+  setTimeout(() => { $("save-status").textContent = ""; }, 2500);
+}
+
+function renderSaved() {
+  const store = loadStore();
+  const names = Object.keys(store).sort();
+  const list = $("saved-list");
+  list.innerHTML = "";
+  if (names.length === 0) {
+    list.innerHTML = '<li><span class="saved-q">No saved answers yet. Name one above and hit Save.</span></li>';
+    return;
+  }
+  for (const name of names) {
+    const li = document.createElement("li");
+    const left = document.createElement("span");
+    const nm = document.createElement("span");
+    nm.className = "saved-name";
+    nm.textContent = name;
+    left.appendChild(nm);
+    if (store[name].q) {
+      const q = document.createElement("span");
+      q.className = "saved-q";
+      q.textContent = "  " + store[name].q;
+      left.appendChild(q);
+    }
+    const actions = document.createElement("span");
+    actions.className = "saved-actions";
+    const loadBtn = document.createElement("button");
+    loadBtn.type = "button";
+    loadBtn.textContent = "Load";
+    loadBtn.addEventListener("click", () => {
+      const a = loadStore()[name];
+      if (!a) return;
+      $("question").value = a.q || "";
+      $("in-s").value = a.s || "";
+      $("in-t").value = a.t || "";
+      $("in-a").value = a.a || "";
+      $("in-r").value = a.r || "";
+      $("save-name").value = name;
+      update();
+      flash('Loaded "' + name + '".');
+    });
+    const delBtn = document.createElement("button");
+    delBtn.type = "button";
+    delBtn.className = "danger";
+    delBtn.textContent = "Delete";
+    delBtn.addEventListener("click", () => {
+      const store2 = loadStore();
+      delete store2[name];
+      saveStore(store2);
+      renderSaved();
+      flash('Deleted "' + name + '".');
+    });
+    actions.appendChild(loadBtn);
+    actions.appendChild(delBtn);
+    li.appendChild(left);
+    li.appendChild(actions);
+    list.appendChild(li);
+  }
+}
+
+$("save-btn").addEventListener("click", () => {
+  const name = $("save-name").value.trim();
+  if (!name) {
+    flash("Give the answer a name first.");
+    return;
+  }
+  const store = loadStore();
+  store[name] = {
+    q: $("question").value,
+    s: $("in-s").value,
+    t: $("in-t").value,
+    a: $("in-a").value,
+    r: $("in-r").value,
+    saved: Date.now()
+  };
+  if (saveStore(store)) {
+    renderSaved();
+    flash('Saved "' + name + '" to this browser.');
+  } else {
+    flash("Could not save (localStorage unavailable or full).");
+  }
+});
+
+document.addEventListener("input", update);
+document.addEventListener("change", update);
+update();
+renderSaved();
+</script>
+</body>
+</html>
