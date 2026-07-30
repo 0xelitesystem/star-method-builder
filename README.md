@@ -27,6 +27,10 @@ There is no generation, no scoring engine, and no network use. It is a structure
 
 All client-side. Nothing leaves the browser: no requests, no analytics, no accounts. Saved answers live in your browser's localStorage on your device only; clearing site data removes them.
 
+## More
+
+Part of a catalog of single-file browser tools and plain-language references, all MIT licensed and dependency-free: [0xelitesystem.github.io](https://0xelitesystem.github.io/). Built by [elitesystem.ai](https://elitesystem.ai).
+
 ## License
 
 MIT. Copyright 0xelitesystem 2026.
