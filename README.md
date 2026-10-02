@@ -2,9 +2,18 @@
 
 Guided builder for STAR interview answers (Situation, Task, Action, Result). Four guided sections with prompts and word targets, a live assembled preview, a bank of common behavioral questions, and locally saved answers. No external services, a structured writing aid that runs entirely in your browser.
 
-## Live demo
+**Live demo:** https://0xelitesystem.github.io/star-method-builder/
 
-https://0xelitesystem.github.io/star-method-builder/
+## Use
+
+1. Pick a behavioral question from the list.
+2. Fill in Situation, Task, Action, and Result, watching each word count against its target.
+3. Check the assembled preview and the total word count.
+4. Click Copy full answer, or give it an Answer name and click Save to keep it in this browser.
+
+## Why this exists
+
+A STAR answer falls apart when the setup runs long and the result has no number. This tool gives each part a word target and shows the assembled answer as you type. It is one HTML file with no AI, no account, and no tracking, released under the MIT license.
 
 ## Features
 
@@ -26,6 +35,21 @@ There is no generation, no scoring engine, and no network use. It is a structure
 ## Privacy
 
 All client-side. Nothing leaves the browser: no requests, no analytics, no accounts. Saved answers live in your browser's localStorage on your device only; clearing site data removes them.
+
+Saved answers are kept under the localStorage key `star-method-builder.answers.v1`. Nothing else is stored.
+
+## Run locally
+
+```
+git clone https://github.com/0xelitesystem/star-method-builder
+cd star-method-builder
+```
+
+Open `index.html` in a browser, or serve the folder with `python -m http.server` and visit http://localhost:8000.
+
+## Build
+
+No build step. The whole tool is one `index.html` file.
 
 ## More
 
